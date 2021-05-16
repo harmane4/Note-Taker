@@ -10,6 +10,7 @@ const app = express();
 
 // Serving Static Files 
 app.use(express.static("public"));
+app.use(express.json());
 
 // Routes 
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "/public/index.html")));
@@ -18,6 +19,17 @@ app.get("/notes", (req, res) => res.sendFile(path.join(__dirname, "/public/notes
 
 // Displays all notes 
 app.get("/api/notes", (req, res) => res.json(notes));
+
+// Read db.json file
+fs.readFile("./db/db.json", "utf8",(err, jsonString) => {
+if (err) {
+    console.log("File read filed:", err)
+    return
+}
+    console.log("File data", jsonString)
+});
+  
+
 
 
 
