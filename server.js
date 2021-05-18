@@ -1,39 +1,59 @@
-// Dependencies 
+// Dependencies
 const fs = require("fs");
 const express = require("express");
 const http = require("http");
 const path = require("path");
 
 // Sets up Express App
-const PORT = 1000; 
+const port = process.env.PORT || 1000;
 const app = express();
 
-// Serving Static Files 
+// Serving Static Files
 app.use(express.static("public"));
 app.use(express.json());
 
-// Routes 
-app.get("/", (req, res) => res.sendFile(path.join(__dirname, "/public/index.html")));
+// Routes
+app.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname, "/public/index.html"))
+);
 
-app.get("/notes", (req, res) => res.sendFile(path.join(__dirname, "/public/notes.html")));
+app.get("/notes", (req, res) =>
+  res.sendFile(path.join(__dirname, "/public/notes.html"))
+);
 
-// Displays all notes 
-app.get("/api/notes", (req, res) => res.json(notes));
-
-// Read db.json file
-fs.readFile("./db/db.json", "utf8",(err, jsonString) => {
-if (err) {
-    console.log("File read filed:", err)
-    return
-}
-    console.log("File data", jsonString)
+// Displays all notes
+app.get("/api/notes", (req, res) => {
+  // Read db.json file
+  fs.readFile("./db/db.json", "utf8", (err, jsonString) => {
+    if (err) {
+      console.log("File read filed:", err);
+      return;
+    }
+    console.log("File data", jsonString);
+    res.json(JSON.parse(jsonString)); // JSON to array
+  });
 });
-  
 
+app.post("/api/notes", (req, res) => {
+  const newNote = req.body;
+  newNote.id = Date.now()
+  console.log("newnote", newNote);
+  // POST
+  fs.readFile("./db/db.json", "utf8", (err, jsonString) => {
+    if (err) {
+      console.log("File read filed:", err);
+      return;
+    }
+    console.log("File data", jsonString);
+    var notes = JSON.parse(jsonString); // JSON to array
 
+    notes.push(newNote);
+    fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
+      if (err) throw err;
+      return res.json(true);
+    });
+  });
+});
 
-
-// Starts the server to begin listening 
-
-app.listen(PORT, () =>
-console.log(`App listening on PORT ${PORT}`));
+// Starts the server to begin listening
+app.listen(port, () => console.log(`App listening on PORT ${port}`));
