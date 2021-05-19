@@ -5,7 +5,7 @@ const http = require("http");
 const path = require("path");
 
 // Sets up Express App
-const port = process.env.PORT || 1000;
+const port = process.env.PORT || 3000;
 const app = express();
 
 // Serving Static Files
@@ -34,6 +34,7 @@ app.get("/api/notes", (req, res) => {
   });
 });
 
+// POST
 app.post("/api/notes", (req, res) => {
   const newNote = req.body;
   newNote.id = Date.now()
@@ -45,12 +46,14 @@ app.post("/api/notes", (req, res) => {
       return;
     }
     console.log("File data", jsonString);
-    var notes = JSON.parse(jsonString); // JSON to array
+    // JSON to array
+    var notes = JSON.parse(jsonString); 
 
     notes.push(newNote);
+    // ARRAY back to string
     fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
       if (err) throw err;
-      return res.json(true);
+      return res.end();
     });
   });
 });
