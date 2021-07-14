@@ -5,7 +5,7 @@
 
 This application called Note Taker can be used to write and save notes. This application uses an Express.js back end and saves and retrieve note data from a JSON file.
 
-When the application is first opened the user sis presented with a landing page with a link to a notes page. When the link is clicked on a new page is presented with existing notes on the left hand column and an empty field to create new notes on the righ hand column. 
+When the application is first opened the user is presented with a landing page with a link to a notes page. When the link is clicked on a new page is presented with existing notes on the left hand column and an empty field to create new notes on the righ hand column. 
 
 When a new note is entered into the text area, a save button appears. Once that save button is clicked the note is created and appears on the left hand column with the rest of the notes.
 
